@@ -152,11 +152,6 @@ struct ClientErrorInner {
 
 struct AuthenticationMiddleware;
 
-impl AuthenticationMiddleware {
-    const DUMMY_AUTH: HeaderValue =
-        HeaderValue::from_static("auth=JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26");
-}
-
 #[async_trait]
 impl Middleware for AuthenticationMiddleware {
     async fn handle(
@@ -165,7 +160,9 @@ impl Middleware for AuthenticationMiddleware {
         extensions: &mut Extensions,
         next: Next<'_>,
     ) -> reqwest_middleware::Result<Response> {
-        req.headers_mut().append("Cookie", Self::DUMMY_AUTH);
+        static DUMMY_AUTH: HeaderValue =
+            HeaderValue::from_static("auth=JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26");
+        req.headers_mut().append("Cookie", DUMMY_AUTH.clone());
         next.run(req, extensions).await
     }
 }

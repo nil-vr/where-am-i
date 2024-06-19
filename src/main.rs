@@ -179,7 +179,7 @@ impl<'de> Deserialize<'de> for WorldId {
         D: serde::Deserializer<'de>,
     {
         let s = <Cow<'de, str>>::deserialize(deserializer)?;
-        FromStr::from_str(&s).map_err(|e| D::Error::custom(e))
+        FromStr::from_str(&s).map_err(D::Error::custom)
     }
 }
 
@@ -209,7 +209,7 @@ impl<'de> Deserialize<'de> for UserId {
         D: serde::Deserializer<'de>,
     {
         let s = <Cow<'de, str>>::deserialize(deserializer)?;
-        FromStr::from_str(&s).map_err(|e| D::Error::custom(e))
+        FromStr::from_str(&s).map_err(D::Error::custom)
     }
 }
 
@@ -297,7 +297,7 @@ impl<'de> Deserialize<'de> for RoomId {
         D: serde::Deserializer<'de>,
     {
         let s = <Cow<'de, str>>::deserialize(deserializer)?;
-        FromStr::from_str(&s).map_err(|e| D::Error::custom(e))
+        FromStr::from_str(&s).map_err(D::Error::custom)
     }
 }
 
@@ -323,7 +323,7 @@ async fn status(
 
             yield Ok(change);
         }
-        while let Ok(_) = location.changed().await {
+        while location.changed().await.is_ok() {
             let change = {
                 let location = location.borrow_and_update();
                 Event::default()

@@ -203,7 +203,6 @@ impl AsyncRead for LogReader {
 
 #[derive(Debug)]
 pub struct LogEvent {
-    pub timestamp: NaiveDateTime,
     pub kind: LogEventKind,
 }
 
@@ -240,9 +239,8 @@ fn parse_line(line: &str) -> Option<LogEvent> {
     let min = ts[14..16].parse().ok()?;
     let sec = ts[17..19].parse().ok()?;
 
-    let date = NaiveDate::from_ymd_opt(year, month, day)?;
-    let time = NaiveTime::from_hms_opt(hour, min, sec)?;
-    let timestamp = NaiveDateTime::new(date, time);
+    NaiveDate::from_ymd_opt(year, month, day)?;
+    NaiveTime::from_hms_opt(hour, min, sec)?;
 
     let (source, message) = rest.split_once("-  ")?;
     let source = source.trim_end();
@@ -262,7 +260,7 @@ fn parse_line(line: &str) -> Option<LogEvent> {
         return None;
     };
 
-    Some(LogEvent { timestamp, kind })
+    Some(LogEvent { kind })
 }
 
 fn file_log_events(path: impl AsRef<Path>) -> impl Stream<Item = anyhow::Result<LogEvent>> {
