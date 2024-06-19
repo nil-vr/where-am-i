@@ -51,7 +51,6 @@ jobs:
         with:
           subject-path: |
             target/release/where-am-i.exe
-            where-am-i-*.zip
           sbom-path: where-am-i_bin.cdx.json
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
