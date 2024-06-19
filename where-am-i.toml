@@ -1,0 +1,18 @@
+# where-am-i configuration file
+# Lines beginning with # are comments.
+
+# Uncomment and set to change the address or port number.
+# "0.0.0.0:37544" can be used to mave the service visible to other computers on the network.
+# Doing this on a public network may allow unexpected users to join you in VRChat.
+# address = "127.0.0.1:37544"
+
+# Uncomment and set to the location of the VRChat log files.
+# If unspecified, the path will be autodetected.
+# log_files = "C:\\Users\\User\\AppData\\LocalLow\\VRChat\\VRChat"
+
+# Uncomment and set to change the location of the browser files.
+# This may be useful for installing themes.
+# content = "static"
+
+# Uncomment and set to change the location of the cache.
+# cache = "cache"

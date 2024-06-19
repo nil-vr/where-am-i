@@ -1,0 +1,68 @@
+name: build
+
+on:
+  push:
+    branches: main
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - name: Tools
+        run: |
+          cargo install cargo-auditable cargo-cyclonedx --locked
+      - name: Build
+        run: |
+          cargo fmt --check
+          cargo clippy --all-targets
+          cargo test
+          cargo auditable build --release
+          cargo cyclonedx -f json --describe binaries
+      - name: Assemble
+        run: |
+          $version = cargo metadata --format-version 1 | ConvertFrom-Json | ForEach-Object packages | Where-Object name -eq where-am-i | ForEach-Object version
+          $dist = mkdir "where-am-i-${version}"
+          cp -Recurse @(
+            'LICENSE'
+            'README.md'
+            'static'
+            'target/release/where_am_i.pdb'
+            'target/release/where-am-i.exe'
+            'where-am-i_bin.cdx.json'
+            'where-am-i.toml'
+          ) $dist
+          Compress-Archive $dist "where-am-i-${version}.zip" -CompressionLevel Optimal
+          rm -r $dist
+      - name: Generate SBOM attestation
+        uses: actions/attest-sbom@v1
+        with:
+          subject-path: |
+            target/release/where-am-i.exe
+            where-am-i-*.zip
+          sbom-path: where-am-i_bin.cdx.json
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            target/release/where-am-i.exe
+            where-am-i-*.zip
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows
+          path: where-am-i-*.zip
+          if-no-files-found: error
+          retention-days: '2'

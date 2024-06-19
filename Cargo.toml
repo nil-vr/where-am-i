@@ -1,0 +1,33 @@
+[package]
+name = "where-am-i"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.86"
+async-stream = "0.3.5"
+async-trait = "0.1.80"
+axum = { version = "0.7.5" }
+chrono = { version = "0.4.38", default-features = false }
+fast_qr = { version = "0.12.5", features = ["svg"] }
+figment = { version = "0.10.19", features = ["toml"] }
+futures = "0.3.30"
+http = "1.1.0"
+http-cache-reqwest = "0.14.0"
+notify = { version = "6.1.1", default-features = false }
+pin-project-lite = "0.2.14"
+reqwest = { version = "0.12.4" }
+reqwest-middleware = { version = "0.3.1", features = ["json"] }
+reqwest-retry = "0.5.0"
+reqwest-tracing = "0.5.0"
+serde = { version = "1.0.203", features = ["derive"] }
+serde_derive = "1.0.203"
+tokio = { version = "1.38.0", features = ["fs", "io-util", "macros", "rt", "sync", "time"] }
+tower-http = { version = "0.5.2", features = ["fs", "trace"] }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+uuid = "1.8.0"
+windows = { version = "0.57.0", features = ["Storage"] }
+
+[build-dependencies]
+embed-resource = "2.4.2"

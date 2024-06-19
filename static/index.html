@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <img id="image">
+        <div id="text">
+            <h1 id="world">Current World: <span id="worldName"></span></h1>
+            <h2 id="author">Author: <span id="authorName"></span></h2>
+            <span id="description"></span>
+        </div>
+        <img id="qr">
+    </body>
+
+    <script>
+        const image = document.getElementById("image")
+        const qr = document.getElementById("qr")
+        const worldName = document.getElementById("worldName")
+        const authorName = document.getElementById("authorName")
+        const description = document.getElementById("description")
+        function reset() {
+            image.src = ""
+            qr.src = ""
+            worldName.innerText = null
+            description.innerText = null
+        }
+        reset()
+
+        const events = new EventSource("/api/status")
+        events.addEventListener("location", e => {
+            const data = JSON.parse(e.data)
+            if (data) {
+                console.log(data)
+                worldName.innerText = data.world?.name
+                authorName.innerText = data.world?.authorName
+                image.src = `/api/world/${data.worldId}/image`
+                qr.src = `/api/world/${data.worldId}/qr.svg`
+                description.innerText = data.world?.description
+            } else {
+                reset()
+            }
+        })
+    </script>
+</html>
