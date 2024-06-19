@@ -33,7 +33,7 @@ jobs:
           cargo cyclonedx -f json --describe binaries
       - name: Assemble
         run: |
-          $version = cargo metadata --format-version 1 | ConvertFrom-Json | ForEach-Object packages | Where-Object name -eq where-am-i | ForEach-Object version
+          $version = cargo metadata --no-deps --format-version 1 | ConvertFrom-Json | ForEach-Object packages | Where-Object name -eq where-am-i | ForEach-Object version
           $dist = mkdir "where-am-i-${version}"
           cp -Recurse @(
             'LICENSE'
