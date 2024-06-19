@@ -60,7 +60,7 @@ jobs:
             target/release/where-am-i.exe
             where-am-i-*.zip
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows
           path: where-am-i-*.zip
