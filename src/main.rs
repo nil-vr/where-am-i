@@ -15,7 +15,7 @@ use axum::{
     routing::get,
     Router,
 };
-use fast_qr::{convert::svg::SvgBuilder, QRBuilder};
+use fast_qr::{convert::svg::SvgBuilder, QRBuilder, ECL};
 use figment::{
     providers::{Format, Toml},
     Figment,
@@ -350,7 +350,7 @@ async fn world_image(
 
 async fn world_qr_svg(Path(world): Path<WorldId>) -> Response {
     let url = format!("https://vrchat.com/home/world/{world}");
-    let qr = QRBuilder::new(url).build().unwrap();
+    let qr = QRBuilder::new(url).ecl(ECL::L).build().unwrap();
     let svg = SvgBuilder::default().to_str(&qr);
     Response::builder()
         .header(header::CONTENT_TYPE, "image/svg+xml; charset=utf-8")
@@ -387,7 +387,10 @@ async fn room_qr_svg(Path(room): Path<RoomId>) -> Response {
         ],
     )
     .unwrap();
-    let qr = QRBuilder::new(String::from(url)).build().unwrap();
+    let qr = QRBuilder::new(String::from(url))
+        .ecl(ECL::L)
+        .build()
+        .unwrap();
     let svg = SvgBuilder::default().to_str(&qr);
     Response::builder()
         .header(header::CONTENT_TYPE, "image/svg+xml; charset=utf-8")
