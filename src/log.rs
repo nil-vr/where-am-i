@@ -52,7 +52,7 @@ pub fn log_events(path: impl AsRef<Path>) -> impl Stream<Item = anyhow::Result<L
 fn parse_log_file_name(name: &OsStr) -> Option<NaiveDateTime> {
     let name = name.to_str()?;
     let timestamp = name.strip_prefix("output_log_")?.strip_suffix(".txt")?;
-    if timestamp.len() != 19 || timestamp.chars().any(|c| !c.is_ascii()) {
+    if timestamp.len() != 19 || !timestamp.is_ascii() {
         return None;
     }
     let bytes = timestamp.as_bytes();
