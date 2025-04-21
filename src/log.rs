@@ -215,7 +215,7 @@ pub enum LogEventKind {
 }
 
 fn parse_line(line: &str) -> Option<LogEvent> {
-    const TS_LEN: usize = "YYYY.MM.DD HH.MM.SS ".len();
+    const TS_LEN: usize = "YYYY.MM.DD HH:MM:SS ".len();
     if line.len() < TS_LEN || !line.is_char_boundary(TS_LEN) {
         return None;
     }
@@ -245,7 +245,7 @@ fn parse_line(line: &str) -> Option<LogEvent> {
     let (source, message) = rest.split_once("-  ")?;
     let source = source.trim_end();
 
-    if source != "Log" {
+    if source != "Debug" {
         return None;
     }
 
@@ -271,7 +271,7 @@ fn file_log_events(path: impl AsRef<Path>) -> impl Stream<Item = anyhow::Result<
 
         let mut buffer = Vec::new();
 
-        const END: &[u8; 4] = b"\n\n\r\n";
+        const END: &[u8; 2] = b"\r\n";
 
         loop {
             buffer.clear();
