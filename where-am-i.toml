@@ -8,7 +8,9 @@
 
 # Uncomment and set to the location of the VRChat log files.
 # If unspecified, the path will be autodetected.
-# log_files = "C:\\Users\\User\\AppData\\LocalLow\\VRChat\\VRChat"
+# logs_path = "C:\\Users\\User\\AppData\\LocalLow\\VRChat\\VRChat"
+# On Linux, the path is probably something like this.
+# logs_path = "/home/username/.local/share/Steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat"
 
 # Uncomment and set to change the location of the browser files.
 # This may be useful for installing themes.

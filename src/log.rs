@@ -20,10 +20,12 @@ use tokio::{
     time::{interval, Interval, MissedTickBehavior},
 };
 use tracing::debug;
+#[cfg(windows)]
 use windows::Storage::UserDataPaths;
 
 use crate::RoomId;
 
+#[cfg(windows)]
 pub fn autodetect_path() -> anyhow::Result<PathBuf> {
     let paths = UserDataPaths::GetDefault().context("UserDataPath error")?;
     let hstring = paths
@@ -35,6 +37,11 @@ pub fn autodetect_path() -> anyhow::Result<PathBuf> {
     debug!(?path, "Found VRChat log directory");
 
     Ok(path)
+}
+
+#[cfg(not(windows))]
+pub fn autodetect_path() -> anyhow::Result<PathBuf> {
+    anyhow::bail!("Set logs_path in where-am-i.toml to the location of your VRChat log files")
 }
 
 pub fn log_events(path: impl AsRef<Path>) -> impl Stream<Item = anyhow::Result<LogEvent>> {
